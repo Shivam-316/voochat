@@ -1,13 +1,13 @@
 import "./App.css";
 import React from "react";
-import { GoogleSignIn } from "./components/googleSignIn/GoogleSignIn";
+import { GoogleSignIn } from "./components/GoogleSignIn/GoogleSignIn";
 import { Signout } from "./components/Signout/Signout";
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { login, logout } from "./features/user/userSlice";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { app } from "../firebase/App";
-import { Channel } from "./components/channel/Channel";
+import { Channel } from "./components/Channel/Channel";
 
 // Create a context to store auth obj which is required by firebase
 export const AuthContext = React.createContext()

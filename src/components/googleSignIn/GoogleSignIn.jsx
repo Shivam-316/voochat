@@ -4,7 +4,7 @@ import {
   useDeviceLanguage,
   signInWithPopup,
 } from "firebase/auth";
-import { Button } from "../button/Button";
+import { Button } from "../Button/Button";
 import { useSelector } from "react-redux";
 import { AuthContext } from "../../App";
 export const GoogleSignIn = () => {

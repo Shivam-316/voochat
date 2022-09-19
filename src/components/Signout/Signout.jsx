@@ -2,7 +2,7 @@ import { signOut } from "firebase/auth";
 import React, { useContext } from "react";
 import { useSelector } from "react-redux";
 import { AuthContext } from "../../App";
-import { Button } from "../button/Button";
+import { Button } from "../Button/Button";
 
 export const Signout = () => {
   // Get auth
