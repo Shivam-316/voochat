@@ -4,12 +4,12 @@ import { getAuth } from "firebase/auth";
 import { getStorage } from 'firebase/storage'
 
 const firebaseConfig = {
-  apiKey: "AIzaSyDoNicTcX6UyyrcAdUq6i85mn6WSkHwKJk",
+  apiKey: import.meta.env.VITE_FIREBASE_APIKEY ?? process.env.VITE_FIREBASE_APIKEY,
   authDomain: "voochat-316.firebaseapp.com",
   projectId: "voochat-316",
   storageBucket: "voochat-316.appspot.com",
-  messagingSenderId: "585959797947",
-  appId: "1:585959797947:web:e9a05f3f1861176cfb259e"
+  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGE_ID ?? process.env.VITE_FIREBASE_MESSAGE_ID,
+  appId: import.meta.env.VITE_FIREBASE_APP_ID ?? process.env.VITE_FIREBASE_APP_ID,
 };
 
 const app = initializeApp(firebaseConfig);

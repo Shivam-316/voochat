@@ -1,6 +1,6 @@
 import React from "react";
 import { signOut } from "firebase/auth";
-import { auth } from "../../../firebase/App";
+import { auth } from "../../firebase/App";
 import Button from "../Button/Button";
 
 export const Signout = () => {

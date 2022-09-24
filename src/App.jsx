@@ -5,7 +5,7 @@ import { GoogleSignIn } from "./components/GoogleSignIn/GoogleSignIn";
 import { Channel } from "./components/Channel/Channel";
 import { Navbar } from "./components/NavBar/Navbar";
 import { onAuthStateChanged } from "firebase/auth";
-import { auth } from "../firebase/App";
+import { auth } from "./firebase/App";
 import { login, logout } from "./features/user/userSlice";
 import Spinner from "./components/Spinner/Spinner";
 

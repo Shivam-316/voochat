@@ -9,7 +9,7 @@ import Button from "../Button/Button";
 import "./googleSignIn.css";
 import Google from "../../assets/google.svg";
 import Logo from "../../assets/logo.svg";
-import { auth, db } from "../../../firebase/App";
+import { auth, db } from "../../firebase/App";
 import { collection, addDoc } from "firebase/firestore";
 
 const randomColor = () => `hsl(${Math.random() * 360}, 100%, 50%)`

@@ -1,5 +1,5 @@
 import React, { useEffect, useReducer, useRef, useState } from "react";
-import { db } from "../../../firebase/App";
+import { db } from "../../firebase/App";
 import { Message } from "../Message/Message";
 import { NewMessage } from "../NewMessage/NewMessage";
 import {
@@ -8,11 +8,9 @@ import {
   onSnapshot,
   orderBy,
   query,
-  where,
 } from "firebase/firestore";
 import "./channel.css";
 import { ImageUploadPreview } from "../ImageUploadPreview/ImageUploadPreview";
-import { useSelector } from "react-redux";
 
 const initialNewMessageState = {
   preview: false,
