@@ -1,7 +1,7 @@
 import "./App.css";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { GoogleSignIn } from "./components/GoogleSignIn/GoogleSignIn";
+import { GoogleSignIn } from "./components/SignIn/GoogleSignIn";
 import { Channel } from "./components/Channel/Channel";
 import { Navbar } from "./components/NavBar/Navbar";
 import { onAuthStateChanged } from "firebase/auth";
