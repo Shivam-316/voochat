@@ -1,25 +1,22 @@
 import "./App.css";
-import React from "react";
-import { GoogleSignIn } from "./components/GoogleSignIn/GoogleSignIn";
-import { Signout } from "./components/Signout/Signout";
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { login, logout } from "./features/user/userSlice";
-import { getAuth, onAuthStateChanged } from "firebase/auth";
-import { app } from "../firebase/App";
+import { GoogleSignIn } from "./components/GoogleSignIn/GoogleSignIn";
 import { Channel } from "./components/Channel/Channel";
+import { Navbar } from "./components/NavBar/Navbar";
+import { onAuthStateChanged } from "firebase/auth";
+import { auth } from "../firebase/App";
+import { login, logout } from "./features/user/userSlice";
+import Spinner from "./components/Spinner/Spinner";
 
-// Create a context to store auth obj which is required by firebase
-export const AuthContext = React.createContext()
 function App() {
-  // Get Auth Obj
-  const auth = getAuth(app);
-  // Initial loder while firebase connects and gets actual state
-  const [initializing, setInitializing] = useState(true);
   // Create dispatch function for calling login, logout actions
   const dispatch = useDispatch();
 
-  // Setup side-effect when eveer user auth state changes
+  // Initial loder while firebase connects and gets actual state
+  const [initializing, setInitializing] = useState(true);
+
+  // Setup side-effect when ever user auth state changes
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       // if user is avaliable then store user data, else set user to NULL
@@ -38,21 +35,23 @@ function App() {
     return unsubscribe;
   }, []);
 
-  const user = useSelector((state) => state.userData.user); 
-
-  if (initializing) {
-    return <p>Loading...</p>;
-  }
-
+  // Get current user from redux store
+  const currentUser = useSelector((state) => state.userData.user);
 
   return (
-    <div className="App">
-      <AuthContext.Provider value={auth}>
-        <GoogleSignIn />
-        <Signout />
-        <Channel user={user}/>
-      </AuthContext.Provider>
-    </div>
+    <>
+    { initializing ?
+      <div className="loading">
+        <Spinner side="5rem"/>
+      </div>
+      :
+      <div className="App grid">
+        <Navbar />
+        {!currentUser && <GoogleSignIn />}
+        {currentUser && <Channel />}
+      </div>
+    }
+    </>
   );
 }
 

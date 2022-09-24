@@ -1,0 +1,29 @@
+.messages__container {
+  position: relative;
+  width: 60vw;
+  margin: 0 auto;
+  margin-top: 1rem;
+}
+.messages__container ul {
+  height: calc(100vh - 9rem);
+  overflow-y: scroll;
+  padding-inline: 1rem;
+}
+
+.channel__boilerplate {
+  text-align: center;
+  color: var(--text-color);
+}
+.channel__boilerplate h1 {
+  padding-top: 1rem;
+}
+.channel__boilerplate p {
+  margin-block: 1rem;
+  color: var(--text-color);
+}
+
+@media only screen and (max-width: 60em) {
+  .messages__container {
+    width: 80vw;
+  }
+}

@@ -1,0 +1,18 @@
+.nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-inline: 1rem;
+  box-shadow: 0px 2px 8px -2px black;
+}
+.nav__buttons {
+  display: flex;
+  gap: 1rem;
+}
+.nav__logo-container {
+  width: 3rem;
+}
+.nav__logo {
+  object-fit: cover;
+  width: inherit;
+}

@@ -1,5 +1,4 @@
-import React from "react";
+import { DefaultButton, ThemedButton, CloseButton } from "./Button.styles.jsx";
 
-export const Button = ({ onClick = null, children = null }) => {
-  return <button onClick={onClick}>{children}</button>;
-};
+export default DefaultButton;
+export {ThemedButton, CloseButton};

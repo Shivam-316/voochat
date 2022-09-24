@@ -1,0 +1,7 @@
+.fileupload__container {
+  padding-right: 0.5rem;
+}
+
+.fileupload__input {
+  display: none;
+}

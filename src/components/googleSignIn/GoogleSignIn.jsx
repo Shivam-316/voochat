@@ -1,18 +1,20 @@
-import React, { useContext, useState } from "react";
+import React from "react";
 import {
   GoogleAuthProvider,
   useDeviceLanguage,
   signInWithPopup,
+  getAdditionalUserInfo,
 } from "firebase/auth";
-import { Button } from "../Button/Button";
-import { useSelector } from "react-redux";
-import { AuthContext } from "../../App";
-export const GoogleSignIn = () => {
-  // Get auth
-  const auth = useContext(AuthContext)
-  // Get current user from redux store
-  const currentUser = useSelector((state) => state.userData.user);
+import Button from "../Button/Button";
+import "./googleSignIn.css";
+import Google from "../../assets/google.svg";
+import Logo from "../../assets/logo.svg";
+import { auth, db } from "../../../firebase/App";
+import { collection, addDoc } from "firebase/firestore";
 
+const randomColor = () => `hsl(${Math.random() * 360}, 100%, 50%)`
+
+export const GoogleSignIn = () => {
   const signInWithGoogle = async () => {
     // Retrieve google auth provider
     const provider = new GoogleAuthProvider();
@@ -21,15 +23,33 @@ export const GoogleSignIn = () => {
     // Start signin process
     try {
       // signout from firebase => trigger auth change => changes redux store state
-      await signInWithPopup(auth, provider);
+      const creadentials = await signInWithPopup(auth, provider);
+      const isNewUser = getAdditionalUserInfo(creadentials).isNewUser
+      let uid = creadentials.user.providerData[0].uid
+      let usersRef = collection(db, 'users')
+
+      if(isNewUser){
+        await addDoc(usersRef, {uid, userColor: randomColor()})
+      }
     } catch (error) {
       console.log(error);
     }
   };
 
   return (
-    <div>
-      {!currentUser && <Button onClick={signInWithGoogle}>Sign In With Google</Button>}
+    <div className="flex">
+      <div className="jumbotron">
+        <div className="jumbotron__heading">
+          <img src={Logo} alt="Large Logo" />
+          <h1>VooChat</h1>
+        </div>
+
+        <p className="tagline">The fastest way to chat, with people around!</p>
+
+        <Button onClick={signInWithGoogle}>
+          Sign In With <img className="google-icon" src={Google} />
+        </Button>
+      </div>
     </div>
   );
 };

@@ -1,0 +1,37 @@
+.flex {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
+.jumbotron {
+  text-align: center;
+  background-color: #595959;
+  max-width: fit-content;
+  padding: 2rem 4rem;
+  border-radius: 20px;
+  margin-inline: 1rem;
+}
+
+.jumbotron__heading {
+  display: flex;
+  gap: 1rem;
+  flex-direction: column;
+  align-items: center;
+}
+.jumbotron__heading h1 {
+  color: #ff33b1;
+}
+.jumbotron__heading img {
+  width: clamp(100px, 200px, 400px);
+}
+
+.google-icon {
+  max-width: 1.3rem;
+  vertical-align: text-top;
+}
+
+.tagline {
+  margin-block: 1rem;
+}
