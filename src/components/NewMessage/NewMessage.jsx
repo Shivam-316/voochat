@@ -2,7 +2,7 @@ import { addDoc, collection, getDocs, query, serverTimestamp, where } from "fire
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { useState } from "react";
 import { useSelector } from "react-redux";
-import { db, storage } from "../../firebase/App";
+import { db, storage } from "../../firebase/Database";
 import { ThemedButton } from "../Button/Button";
 import { CHANGE_MESSAGE_ACTION, RESET_ACTION } from "../Channel/Channel";
 import { FileUpload } from "../FileUpload/FileUpload";

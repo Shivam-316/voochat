@@ -1,5 +1,5 @@
 import React, { useEffect, useReducer, useRef, useState } from "react";
-import { db } from "../../firebase/App";
+import { db } from "../../firebase/Database";
 import { Message } from "../Message/Message";
 import { NewMessage } from "../NewMessage/NewMessage";
 import {
