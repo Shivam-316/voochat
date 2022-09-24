@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-import { Signout } from "../Signout/Signout";
+import { Signout } from "../Logout/Signout";
 import "./navbar.css";
 import Logo from "../../assets/logo.svg";
 import { useSelector } from "react-redux";
-import Button from "../Button/Button.jsx";
+import Button from "../Buttons/Button.jsx";
 export const Navbar = () => {
   const currentUser = useSelector((state) => state.userData.user);
   const [darkTheme, setDarkTheme] = useState(true);

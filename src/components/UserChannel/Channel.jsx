@@ -1,7 +1,7 @@
 import React, { useEffect, useReducer, useRef, useState } from "react";
 import { db } from "../../firebase/Database";
-import { Message } from "../Message/Message";
-import { NewMessage } from "../NewMessage/NewMessage";
+import { Message } from "../MessageBox/Message";
+import { NewMessage } from "../NewMessageForm/NewMessage";
 import {
   collection,
   limit,
@@ -10,7 +10,7 @@ import {
   query,
 } from "firebase/firestore";
 import "./channel.css";
-import { ImageUploadPreview } from "../ImageUploadPreview/ImageUploadPreview";
+import { ImageUploadPreview } from "../UploadPreview/ImageUploadPreview";
 
 const initialNewMessageState = {
   preview: false,

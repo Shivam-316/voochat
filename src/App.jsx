@@ -1,13 +1,13 @@
 import "./App.css";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { GoogleSignIn } from "./components/SignIn/GoogleSignIn";
-import { Channel } from "./components/Channel/Channel";
+import { GoogleSignIn } from "./components/Login/GoogleSignIn";
+import { Channel } from "./components/UserChannel/Channel";
 import { Navbar } from "./components/NavBar/Navbar";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "./firebase/Database";
 import { login, logout } from "./features/user/userSlice";
-import Spinner from "./components/Spinner/Spinner";
+import Spinner from "./components/Spinners/Spinner";
 
 function App() {
   // Create dispatch function for calling login, logout actions

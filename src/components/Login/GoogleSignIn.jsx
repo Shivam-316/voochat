@@ -5,7 +5,7 @@ import {
   signInWithPopup,
   getAdditionalUserInfo,
 } from "firebase/auth";
-import Button from "../Button/Button";
+import Button from "../Buttons/Button";
 import "./googleSignIn.css";
 import Google from "../../assets/google.svg";
 import Logo from "../../assets/logo.svg";

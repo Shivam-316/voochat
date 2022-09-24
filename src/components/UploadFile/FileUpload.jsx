@@ -1,5 +1,5 @@
-import { ThemedButton } from "../Button/Button";
-import { ADD_IMAGE_ACTION } from "../Channel/Channel";
+import { ThemedButton } from "../Buttons/Button";
+import { ADD_IMAGE_ACTION } from "../UserChannel/Channel";
 import "./fileupload.css";
 
 export const FileUpload = ({ postingMessage, newMessageStateDispatch }) => {

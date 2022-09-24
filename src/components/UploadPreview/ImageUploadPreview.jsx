@@ -1,6 +1,6 @@
 import React from "react";
-import { CloseButton } from "../Button/Button";
-import { REMOVE_IMAGE_ACTION } from "../Channel/Channel";
+import { CloseButton } from "../Buttons/Button";
+import { REMOVE_IMAGE_ACTION } from "../UserChannel/Channel";
 import './imageuploadpreview.css'
 
 export const ImageUploadPreview = ({newMessageState, newMessageStateDispatch}) => {

@@ -3,10 +3,10 @@ import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { useState } from "react";
 import { useSelector } from "react-redux";
 import { db, storage } from "../../firebase/Database";
-import { ThemedButton } from "../Button/Button";
-import { CHANGE_MESSAGE_ACTION, RESET_ACTION } from "../Channel/Channel";
-import { FileUpload } from "../FileUpload/FileUpload";
-import Spinner from "../Spinner/Spinner";
+import { ThemedButton } from "../Buttons/Button";
+import { CHANGE_MESSAGE_ACTION, RESET_ACTION } from "../UserChannel/Channel";
+import { FileUpload } from "../UploadFile/FileUpload";
+import Spinner from "../Spinners/Spinner";
 import "./newmessage.css";
 
 export const NewMessage = ({ newMessageState, newMessageStateDispatch }) => {
