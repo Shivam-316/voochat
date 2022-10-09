@@ -5,8 +5,6 @@ import {
   serverTimestamp,
   where,
   addDoc,
-  getDoc,
-  doc,
 } from "firebase/firestore";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { useState } from "react";
@@ -45,8 +43,10 @@ export const NewMessage = ({
       }
 
       const messagesRef = collection(db, `channels/${channelID}/messages`);
-      const userMetadataDoc = await getDoc(doc(db, `users/${currentUser.uid}`));
-      let { userColor } = userMetadataDoc.data();
+      const usersRef = collection(db, 'users');
+      let userMetaDataSnap = await getDocs(query(usersRef, where('uid', '==', currentUser.uid)))
+      
+      let { userColor } = userMetaDataSnap.docs[0].data();
       let { displayName, photoURL } = currentUser;
 
       await addDoc(messagesRef, {
