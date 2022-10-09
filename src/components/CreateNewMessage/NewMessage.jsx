@@ -1,16 +1,30 @@
-import { addDoc, collection, getDocs, query, serverTimestamp, where } from "firebase/firestore";
+import {
+  collection,
+  getDocs,
+  query,
+  serverTimestamp,
+  where,
+  addDoc,
+  getDoc,
+  doc,
+} from "firebase/firestore";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { useState } from "react";
-import { useSelector } from "react-redux";
 import { db, storage } from "../../firebase/Database";
-import { ThemedButton } from "../Buttons/Button";
-import { CHANGE_MESSAGE_ACTION, RESET_ACTION } from "../UserChannel/Channel";
+import { ThemedButton } from "../StyledButtons/Button";
+import { CHANGE_MESSAGE_ACTION, RESET_ACTION } from "../Channel/UserChannel";
 import { FileUpload } from "../UploadFile/FileUpload";
-import Spinner from "../Spinners/Spinner";
+import { useContext } from "react";
+import { AuthContext } from "../Auth/AuthProvider";
+import Spinner from "../StyledSpinners/Spinner";
 import "./newmessage.css";
 
-export const NewMessage = ({ newMessageState, newMessageStateDispatch }) => {
-  const currentUser = useSelector((state) => state.userData.user);
+export const NewMessage = ({
+  newMessageState,
+  newMessageStateDispatch,
+  channelID,
+}) => {
+  const currentUser = useContext(AuthContext);
   const [postingMessage, setPostingMessage] = useState(false);
 
   const handelOnSubmit = async (e) => {
@@ -30,19 +44,19 @@ export const NewMessage = ({ newMessageState, newMessageStateDispatch }) => {
         imageURL = url;
       }
 
-      const colRef = collection(db, "messages");
-      const usersRef = collection(db, 'users');
+      const messagesRef = collection(db, `channels/${channelID}/messages`);
+      const userMetadataDoc = await getDoc(doc(db, `users/${currentUser.uid}`));
+      let { userColor } = userMetadataDoc.data();
+      let { displayName, photoURL } = currentUser;
 
-      let userMetaDataSnap = await getDocs(query(usersRef, where('uid', '==', currentUser.uid)))
-      let userMetaData = userMetaDataSnap.docs[0].data()
-
-      await addDoc(colRef, {
-        text: newMessageState.messageText,
+      await addDoc(messagesRef, {
+        displayName,
+        photoURL,
+        userColor,
         imageURL,
+        text: newMessageState.messageText,
         createdAt: serverTimestamp(),
-        userColor: userMetaData.userColor,
-        ...currentUser,
-      });
+      }).catch((error) => console.log(error));
 
       newMessageStateDispatch(RESET_ACTION());
       setPostingMessage(false);
@@ -74,7 +88,11 @@ export const NewMessage = ({ newMessageState, newMessageStateDispatch }) => {
         }
         type="submit"
         style={{ borderTopRightRadius: "5px", borderBottomRightRadius: "5px" }}>
-        {postingMessage ? <Spinner side={"1rem"}/> : <i className="fa-sharp fa-solid fa-paper-plane"></i>}
+        {postingMessage ? (
+          <Spinner side={"1rem"} />
+        ) : (
+          <i className="fa-sharp fa-solid fa-paper-plane"></i>
+        )}
       </ThemedButton>
     </form>
   );

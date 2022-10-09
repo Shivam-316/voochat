@@ -1,5 +1,5 @@
-import { ThemedButton } from "../Buttons/Button";
-import { ADD_IMAGE_ACTION } from "../UserChannel/Channel";
+import { ThemedButton } from "../StyledButtons/Button";
+import { ADD_IMAGE_ACTION } from "../Channel/UserChannel";
 import "./fileupload.css";
 
 export const FileUpload = ({ postingMessage, newMessageStateDispatch }) => {
@@ -17,7 +17,9 @@ export const FileUpload = ({ postingMessage, newMessageStateDispatch }) => {
 
   return (
     <div className="fileupload__container">
-      <ThemedButton style={{ borderRadius: "5px", padding: "0" }} disabled={postingMessage}>
+      <ThemedButton
+        style={{ borderRadius: "5px", padding: "0" }}
+        disabled={postingMessage}>
         <label htmlFor="upload_image" style={{ padding: "1rem" }}>
           <i className="fa-sharp fa-solid fa-upload"></i>
         </label>

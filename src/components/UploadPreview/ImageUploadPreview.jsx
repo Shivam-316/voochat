@@ -1,13 +1,18 @@
 import React from "react";
-import { CloseButton } from "../Buttons/Button";
-import { REMOVE_IMAGE_ACTION } from "../UserChannel/Channel";
-import './imageuploadpreview.css'
+import { CloseButton } from "../StyledButtons/Button";
+import { REMOVE_IMAGE_ACTION } from "../Channel/UserChannel";
+import "./imageuploadpreview.css";
 
-export const ImageUploadPreview = ({newMessageState, newMessageStateDispatch}) => {
+export const ImageUploadPreview = ({
+  newMessageState,
+  newMessageStateDispatch,
+}) => {
   return (
     <div className={`preview ${!newMessageState.preview && "hide"}`}>
       <div>
-        <CloseButton onClick={() => newMessageStateDispatch(REMOVE_IMAGE_ACTION())} />
+        <CloseButton
+          onClick={() => newMessageStateDispatch(REMOVE_IMAGE_ACTION())}
+        />
         <img src={newMessageState.previewImageURL} />
       </div>
     </div>

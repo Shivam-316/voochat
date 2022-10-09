@@ -25,3 +25,9 @@ dist-ssr
 *.sln
 *.sw?
 *.vscode
+
+# emulator files
+*.rules
+firebase.*
+.firebaserc
+firestore*

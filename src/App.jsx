@@ -1,57 +1,41 @@
 import "./App.css";
-import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { GoogleSignIn } from "./components/Login/GoogleSignIn";
-import { Channel } from "./components/UserChannel/Channel";
 import { Navbar } from "./components/NavBar/Navbar";
+import { useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { Outlet } from "react-router-dom";
 import { onAuthStateChanged } from "firebase/auth";
-import { auth } from "./firebase/Database";
 import { login, logout } from "./features/user/userSlice";
-import Spinner from "./components/Spinners/Spinner";
+import { auth } from "./firebase/Database";
 
 function App() {
   // Create dispatch function for calling login, logout actions
   const dispatch = useDispatch();
-
-  // Initial loder while firebase connects and gets actual state
-  const [initializing, setInitializing] = useState(true);
 
   // Setup side-effect when ever user auth state changes
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       // if user is avaliable then store user data, else set user to NULL
       if (user) {
-        dispatch(login(...user.providerData));
+        const userData = {
+          uid: user.uid,
+          email: user.email,
+          displayName: user.displayName,
+          photoURL: user.photoURL,
+        };
+        dispatch(login(userData));
       } else {
         dispatch(logout());
-      }
-
-      // End initialization state when we have the actual user/null
-      if (initializing) {
-        setInitializing(false);
       }
     });
 
     return unsubscribe;
   }, []);
 
-  // Get current user from redux store
-  const currentUser = useSelector((state) => state.userData.user);
-
   return (
-    <>
-    { initializing ?
-      <div className="loading">
-        <Spinner side="5rem"/>
-      </div>
-      :
-      <div className="App grid">
-        <Navbar />
-        {!currentUser && <GoogleSignIn />}
-        {currentUser && <Channel />}
-      </div>
-    }
-    </>
+    <div className="App grid">
+      <Navbar />
+      <Outlet />
+    </div>
   );
 }
 

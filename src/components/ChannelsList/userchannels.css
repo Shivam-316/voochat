@@ -1,0 +1,27 @@
+.channels {
+  width: max-content;
+  margin: 0 auto;
+  text-align: center;
+  display: grid;
+  max-height: 100vh;
+  grid-template-rows: 1fr 1fr;
+}
+.channels h2 {
+  padding-block: 1rem;
+}
+.channels__container {
+  overflow-y: auto;
+}
+
+.channels__list {
+  padding-inline: 0.5rem;
+}
+.channels__list > :first-child {
+  margin-top: 1rem;
+}
+
+.channel__heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}

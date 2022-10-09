@@ -3,9 +3,9 @@ import React from "react";
 import "./message.css";
 
 const openInNewTab = (url) => {
-  const newWindow = window.open(url, '_blank', 'noopener,noreferrer')
-  if (newWindow) newWindow.opener = null
-}
+  const newWindow = window.open(url, "_blank", "noopener,noreferrer");
+  if (newWindow) newWindow.opener = null;
+};
 
 export const Message = ({
   createdAt = null,
@@ -24,7 +24,7 @@ export const Message = ({
       </div>
 
       <div className="message__user-container">
-        {displayName ? <p style={{color: userColor}}>{displayName}</p> : null}
+        {displayName ? <p style={{ color: userColor }}>{displayName}</p> : null}
 
         {createdAt?.seconds ? (
           <span className="message__date">
@@ -32,15 +32,17 @@ export const Message = ({
           </span>
         ) : null}
       </div>
-      { text &&
-        <p className="message__text">{text}</p>
-      }
+      {text && <p className="message__text">{text}</p>}
 
-      {imageURL &&
+      {imageURL && (
         <div className="message__sentImg__container">
-          <img onClick={() => openInNewTab(imageURL)} src={imageURL} alt="Sent Image" />
+          <img
+            onClick={() => openInNewTab(imageURL)}
+            src={imageURL}
+            alt="Sent Image"
+          />
         </div>
-      }
+      )}
     </div>
   );
 };

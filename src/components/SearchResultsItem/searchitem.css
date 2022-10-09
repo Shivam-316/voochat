@@ -1,0 +1,25 @@
+.search__results__item {
+  border: 2px solid grey;
+  padding: 0.5rem;
+  border-radius: 5px;
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  margin-bottom: 1rem;
+  margin-bottom: 50rem;
+}
+.search__results__item:hover {
+  cursor: pointer;
+}
+.search__results__item img {
+  width: 3rem;
+  border-radius: 50%;
+}
+.search__results__item div > p {
+  font-size: var(--smaller-font-size);
+  color: #949494;
+}
+.search__results__item div > p:first-child {
+  font-size: var(--small-font-size);
+  color: var(--text-color);
+}

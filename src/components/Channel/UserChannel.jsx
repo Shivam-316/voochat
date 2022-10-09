@@ -1,16 +1,21 @@
 import React, { useEffect, useReducer, useRef, useState } from "react";
 import { db } from "../../firebase/Database";
-import { Message } from "../MessageBox/Message";
-import { NewMessage } from "../NewMessageForm/NewMessage";
+import { Message } from "../MessageItem/Message";
+import { NewMessage } from "../CreateNewMessage/NewMessage";
 import {
-  collection,
-  limit,
   onSnapshot,
-  orderBy,
+  collection,
   query,
+  where,
+  orderBy,
+  limit,
+  getDoc,
+  doc,
 } from "firebase/firestore";
 import "./channel.css";
 import { ImageUploadPreview } from "../UploadPreview/ImageUploadPreview";
+import { useNavigate, useParams } from "react-router-dom";
+import { ThemedButton } from "../StyledButtons/Button";
 
 const initialNewMessageState = {
   preview: false,
@@ -70,9 +75,10 @@ function newMessageReducer(state, action) {
   }
 }
 
-export const Channel = () => {
+export const UserChannel = () => {
   const [messages, setMessages] = useState([]);
   const messagesListEnd = useRef();
+  const navigate = useNavigate();
   const [newMessageState, newMessageStateDispatch] = useReducer(
     newMessageReducer,
     initialNewMessageState,
@@ -84,9 +90,11 @@ export const Channel = () => {
     });
   };
 
+  const { channelID } = useParams();
+
   useEffect(() => {
     if (db) {
-      const colRef = collection(db, "messages");
+      const colRef = collection(db, `channels/${channelID}/messages`);
       const messageQuery = query(colRef, orderBy("createdAt"), limit(100));
       const unsubscribe = onSnapshot(messageQuery, (querySnapshot) => {
         // Get all documents from collection - with ID's
@@ -109,6 +117,12 @@ export const Channel = () => {
   useReducer();
   return (
     <div className="messages__container">
+      <div className="goto__channels">
+        <ThemedButton onClick={() => navigate("/channels")}>
+          <i className="fa-sharp fa-solid fa-list-ul"></i>
+        </ThemedButton>
+      </div>
+
       <ImageUploadPreview
         newMessageState={newMessageState}
         newMessageStateDispatch={newMessageStateDispatch}
@@ -134,9 +148,11 @@ export const Channel = () => {
 
         <div ref={messagesListEnd} className="messages__end"></div>
       </ul>
+
       <NewMessage
         newMessageState={newMessageState}
         newMessageStateDispatch={newMessageStateDispatch}
+        channelID={channelID}
       />
     </div>
   );

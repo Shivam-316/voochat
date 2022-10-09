@@ -5,36 +5,53 @@ import {
   signInWithPopup,
   getAdditionalUserInfo,
 } from "firebase/auth";
-import Button from "../Buttons/Button";
+import Button from "../StyledButtons/Button";
 import "./googleSignIn.css";
 import Google from "../../assets/google.svg";
 import Logo from "../../assets/logo.svg";
 import { auth, db } from "../../firebase/Database";
 import { collection, addDoc } from "firebase/firestore";
+import { Navigate, useLocation, useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 
-const randomColor = () => `hsl(${Math.random() * 360}, 100%, 50%)`
+const randomColor = () => `hsl(${Math.random() * 360}, 100%, 50%)`;
 
 export const GoogleSignIn = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const currentUser = useSelector((state) => state.userData.user);
+
   const signInWithGoogle = async () => {
     // Retrieve google auth provider
     const provider = new GoogleAuthProvider();
     // Set language to device lang
     useDeviceLanguage(auth);
+
     // Start signin process
     try {
       // signout from firebase => trigger auth change => changes redux store state
       const creadentials = await signInWithPopup(auth, provider);
-      const isNewUser = getAdditionalUserInfo(creadentials).isNewUser
-      let uid = creadentials.user.providerData[0].uid
-      let usersRef = collection(db, 'users')
+      const isNewUser = getAdditionalUserInfo(creadentials).isNewUser;
+      let { uid, email, displayName, photoURL } = creadentials.user;
+      let usersRef = collection(db, "users");
 
-      if(isNewUser){
-        await addDoc(usersRef, {uid, userColor: randomColor()})
+      if (isNewUser) {
+        await addDoc(usersRef, {
+          uid,
+          email,
+          displayName,
+          photoURL,
+          userColor: randomColor(),
+        });
       }
+      console.log(location.state?.next);
+      navigate(location.state?.next || "/channels", { replace: true });
     } catch (error) {
       console.log(error);
     }
   };
+
+  if (currentUser) return <Navigate to="/channels" replace={true} />;
 
   return (
     <div className="flex">

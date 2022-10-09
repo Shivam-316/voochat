@@ -1,7 +1,7 @@
 import React from "react";
 import { signOut } from "firebase/auth";
 import { auth } from "../../firebase/Database";
-import Button from "../Buttons/Button";
+import Button from "../StyledButtons/Button";
 
 export const Signout = () => {
   const handelSignOut = async () => {

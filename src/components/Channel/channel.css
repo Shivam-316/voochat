@@ -9,6 +9,11 @@
   overflow-y: scroll;
   padding-inline: 1rem;
 }
+.messages__container .goto__channels {
+  position: absolute;
+  top: 0;
+  right: 1rem;
+}
 
 .channel__boilerplate {
   text-align: center;
