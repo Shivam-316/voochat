@@ -44,7 +44,6 @@ export const GoogleSignIn = () => {
           userColor: randomColor(),
         });
       }
-      console.log(location.state?.next);
       navigate(location.state?.next || "/channels", { replace: true });
     } catch (error) {
       console.log(error);

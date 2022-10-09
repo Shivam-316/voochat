@@ -9,7 +9,7 @@ export const AuthProvider = ({ children }) => {
   const { user: currentUser, isLoadingUser } = useSelector(
     (state) => state.userData,
   );
-  const location = useLocation();
+  // const location = useLocation();
 
   if (isLoadingUser)
     return (
@@ -19,7 +19,7 @@ export const AuthProvider = ({ children }) => {
     );
 
   // MN : state={{ next: location.pathname }}
-  if (!currentUser) return <Navigate to="/signIn" replace />;
+  if (!isLoadingUser && !currentUser) return <Navigate to="/signIn" replace />;
 
   return (
     <AuthContext.Provider value={currentUser}>{children}</AuthContext.Provider>

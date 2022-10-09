@@ -9,7 +9,7 @@ import "./userchannels.css";
 import { useContext } from "react";
 import { AuthContext } from "../Auth/AuthProvider";
 
-function setChannelsData(queryField, setterMethod) {
+function setChannelsData(queryField, setterMethod, currentUser) {
   let channelsRef = collection(db, "channels");
   const userChannelsQuery = query(
     channelsRef,
@@ -33,13 +33,13 @@ export const UserChannels = () => {
 
   useEffect(() => {
     if (db && currentUser) {
-      return setChannelsData("participants", setUserChannels);
+      return setChannelsData("participants", setUserChannels, currentUser);
     }
   }, [db, currentUser]);
 
   useEffect(() => {
     if (db && currentUser) {
-      return setChannelsData("requestedUsers", setRequestedChannels);
+      return setChannelsData("requestedUsers", setRequestedChannels, currentUser);
     }
   }, [db, currentUser]);
 

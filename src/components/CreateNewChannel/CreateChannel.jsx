@@ -45,7 +45,6 @@ export const CreateChannel = () => {
     } else {
       setUsers([]);
     }
-    // console.log(users)
   };
 
   const handelAddUser = (user) => {
