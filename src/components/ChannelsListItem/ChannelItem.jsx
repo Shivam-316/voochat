@@ -19,10 +19,10 @@ export const ChannelItem = ({ channelID, name, isRequested }) => {
   };
 
   const handelRequestAccepted = async () => {
-    handelDelete();
     await updateDoc(doc(db, "channels", channelID), {
       participants: arrayUnion(currentUser.uid),
     });
+    handelDelete();
   };
 
   const handelOpenChannel = () => {
