@@ -1,7 +1,7 @@
 # Voochat
 ![React](https://img.shields.io/badge/react-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB) ![Firebase](https://img.shields.io/badge/Firebase-039BE5?style=for-the-badge&logo=Firebase&logoColor=white) ![React Router](https://img.shields.io/badge/React_Router-CA4245?style=for-the-badge&logo=react-router&logoColor=white) ![Redux](https://img.shields.io/badge/redux-%23593d88.svg?style=for-the-badge&logo=redux&logoColor=white) ![SASS](https://img.shields.io/badge/SASS-hotpink.svg?style=for-the-badge&logo=SASS&logoColor=white) ![Styled Components](https://img.shields.io/badge/styled--components-DB7093?style=for-the-badge&logo=styled-components&logoColor=white)
 
-Voochat is a Realtime texting and video calling service with fast and hassle free authentication, here user can create channels with 1 - ♾ number of users, and connect with them seemlesslessly, user messages are protected with firebase rules which provide best-in-class privacy.
+Voochat is a Realtime texting and video calling service with fast and hassle free authentication, here user can create channels with 1 - ♾ number of users, and connect with them seamlessly, user messages are protected with firebase rules which provide best-in-class privacy.
 
 |  Status |  Feature |
 | ------------ | ------------ |
