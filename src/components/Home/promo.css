@@ -1,0 +1,32 @@
+.promo__container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+.promo__container h1 {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+.promo__container a {
+  text-decoration-style: wavy;
+  text-decoration-color: var(--emphasis-color);
+  color: var(--text-color);
+  font-weight: var(--font-bold);
+  font-size: var(--large-font-size);
+  transition: all 0.5s ease;
+}
+.promo__container a:hover {
+  text-decoration-color: var(--text-color);
+  color: var(--emphasis-color);
+}
+.promo__container-inner {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap-reverse;
+  text-align: center;
+  gap: 2rem;
+}
+.promo__container-inner > * {
+  flex: 1;
+}
