@@ -27,7 +27,7 @@
 }
 @media screen and (max-width: 425px) {
   .channel__item {
-    justify-content: space-evenly;
+    justify-content: space-around;
     gap: 0.5rem;
   }
 }
