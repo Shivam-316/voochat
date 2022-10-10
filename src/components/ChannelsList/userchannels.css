@@ -1,10 +1,11 @@
 .channels {
-  width: max-content;
+  min-width: 40vw;
   margin: 0 auto;
   text-align: center;
   display: grid;
   max-height: 100vh;
   grid-template-rows: 1fr 1fr;
+  padding-inline: 1rem;
 }
 .channels h2 {
   padding-block: 1rem;
@@ -24,4 +25,10 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+}
+
+@media screen and (max-width: 1024px) {
+  .channels {
+    min-width: 60vw;
+  }
 }

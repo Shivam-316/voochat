@@ -2,7 +2,7 @@
   width: 40vw;
   margin: 0 auto;
   display: grid;
-  grid-template-rows: 4rem max-content auto max-content;
+  grid-template-rows: 4rem repeat(3, max-content);
   padding-block: 2rem 1rem;
   gap: 1rem;
 }
@@ -39,4 +39,19 @@
   max-height: calc(100vh - 25rem);
   overflow-y: auto;
   padding-inline: 1rem;
+}
+
+@media screen and (max-width: 1024px) {
+  .newchannel__conatiner {
+    width: 60vw;
+  }
+}
+@media screen and (max-width: 628px) {
+  .newchannel__conatiner {
+    width: 90vw;
+  }
+
+  .serach__results__list {
+    padding-inline: 0.5rem;
+  }
 }
