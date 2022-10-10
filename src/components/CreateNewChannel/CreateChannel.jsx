@@ -29,22 +29,34 @@ export const CreateChannel = () => {
 
   const handelSearch = (e) => {
     let named = e.target.value;
-    if (named) {
-      getDocs(
+    async function getSearhResults(nameKey) {
+      const uppercaseResults = await getDocs(
         query(
           usersRef,
           orderBy("displayName"),
-          startAt(named),
-          endAt(named + "\uf8ff"),
+          startAt(nameKey.toUpperCase()),
+          endAt(nameKey.toUpperCase() + "\uf8ff"),
         ),
-      ).then((users) => {
-        let data = users.docs.map((doc) => doc.data());
-        data = data.filter((user) => user.uid !== currentUser.uid);
-        setUsers(data);
-      });
-    } else {
-      setUsers([]);
+      );
+
+      const lowercaseResuts = await getDocs(
+        query(
+          usersRef,
+          orderBy("displayName"),
+          startAt(nameKey.toLowerCase()),
+          endAt(nameKey.toLowerCase() + "\uf8ff"),
+        ),
+      );
+
+      let results = [...uppercaseResults.docs, ...lowercaseResuts.docs];
+      results = results.map((doc) => doc.data());
+      return results.filter((user) => user.uid !== currentUser.uid);
     }
+    if (named) {
+      getSearhResults(named)
+      .then(data => setUsers(data))
+    }
+    else setUsers([]);
   };
 
   const handelAddUser = (user) => {
