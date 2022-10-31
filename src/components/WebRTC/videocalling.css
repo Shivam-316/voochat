@@ -1,0 +1,43 @@
+.conference-calling {
+  display: flex;
+  justify-content: center;
+}
+
+.streams-container {
+  padding-block: 1rem;
+  min-width: 70vw;
+  position: relative;
+}
+
+.remotestream-container {
+  border-radius: 10px;
+  height: calc(100% - 2rem);
+  width: 40rem;
+  position: relative;
+  margin: 0 auto;
+  box-shadow: 0px 0px 6px 0px black;
+}
+
+.localstream-container {
+  border-radius: 10px;
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 15rem;
+  height: 9rem;
+  box-shadow: 0px 0px 6px 1px black;
+}
+
+video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 10px;
+}
+
+.action-button {
+  width: 100%;
+  position: absolute;
+  text-align: center;
+  bottom: 1rem;
+}

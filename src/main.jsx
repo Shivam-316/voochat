@@ -11,6 +11,7 @@ import { Provider } from "react-redux";
 import store from "./app/store";
 import "./index.css";
 import { Promo } from "./components/Home/Promo";
+import { VideoCalling } from "./components/WebRTC/VideoCalling";
 
 // store state changes causes whole application to re-render, its the one used by useSelector
 ReactDOM.createRoot(document.getElementById("root")).render(
@@ -44,7 +45,16 @@ ReactDOM.createRoot(document.getElementById("root")).render(
                   <UserChannel />
                 </AuthProvider>
               }
-            />
+            >
+            </Route>
+            <Route
+                path="channel/:channelID/video"
+                element={
+                  <AuthProvider>
+                    <VideoCalling />
+                  </AuthProvider>
+                }
+              />
           </Route>
         </Routes>
       </BrowserRouter>

@@ -16,6 +16,7 @@ import { useContext } from "react";
 import { AuthContext } from "../Auth/AuthProvider";
 import Spinner from "../StyledSpinners/Spinner";
 import "./newmessage.css";
+import { InitiateVideoCall } from "../WebRTC/InitiateVideoCall";
 
 export const NewMessage = ({
   newMessageState,
@@ -94,6 +95,7 @@ export const NewMessage = ({
           <i className="fa-sharp fa-solid fa-paper-plane"></i>
         )}
       </ThemedButton>
+      <InitiateVideoCall />
     </form>
   );
 };
