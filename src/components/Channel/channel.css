@@ -12,7 +12,7 @@
 .messages__container .goto__channels {
   position: absolute;
   top: 0;
-  right: 1rem;
+  right: 1.5rem;
 }
 
 .channel__boilerplate {
@@ -27,8 +27,13 @@
   color: var(--text-color);
 }
 
-@media only screen and (max-width: 60em) {
+@media only screen and (max-width: 770px) {
   .messages__container {
     width: 80vw;
+  }
+}
+@media only screen and (max-width: 450px) {
+  .messages__container {
+    width: 95vw;
   }
 }

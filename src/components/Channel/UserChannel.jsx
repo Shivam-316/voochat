@@ -127,33 +127,35 @@ export const UserChannel = () => {
         newMessageState={newMessageState}
         newMessageStateDispatch={newMessageStateDispatch}
       />
+      
+      <div>
+        <ul>
+          <div className="channel__boilerplate">
+            <h1>
+              Wecome To
+              <br />
+              Voochat
+            </h1>
+            <p>This is the beggining of chat</p>
+          </div>
 
-      <ul>
-        <div className="channel__boilerplate">
-          <h1>
-            Wecome To
-            <br />
-            Voochat
-          </h1>
-          <p>This is the beggining of chat</p>
-        </div>
+          <hr />
 
-        <hr />
+          <div className="messages">
+            {messages.map((message) => (
+              <Message key={message.id} {...message} />
+            ))}
+          </div>
 
-        <div className="messages">
-          {messages.map((message) => (
-            <Message key={message.id} {...message} />
-          ))}
-        </div>
+          <div ref={messagesListEnd} className="messages__end"></div>
+        </ul>
 
-        <div ref={messagesListEnd} className="messages__end"></div>
-      </ul>
-
-      <NewMessage
-        newMessageState={newMessageState}
-        newMessageStateDispatch={newMessageStateDispatch}
-        channelID={channelID}
-      />
+        <NewMessage
+          newMessageState={newMessageState}
+          newMessageStateDispatch={newMessageStateDispatch}
+          channelID={channelID}
+        />
+      </div>
     </div>
   );
 };

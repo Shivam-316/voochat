@@ -43,9 +43,11 @@ export const NewMessage = ({
       }
 
       const messagesRef = collection(db, `channels/${channelID}/messages`);
-      const usersRef = collection(db, 'users');
-      let userMetaDataSnap = await getDocs(query(usersRef, where('uid', '==', currentUser.uid)))
-      
+      const usersRef = collection(db, "users");
+      let userMetaDataSnap = await getDocs(
+        query(usersRef, where("uid", "==", currentUser.uid)),
+      );
+
       let { userColor } = userMetaDataSnap.docs[0].data();
       let { displayName, photoURL } = currentUser;
 
@@ -81,6 +83,7 @@ export const NewMessage = ({
         onChange={handelOnTextChange}
         placeholder="Type Here..."
         autoComplete="off"
+        className="message__textbox"
       />
       <ThemedButton
         disabled={

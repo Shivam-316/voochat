@@ -25,8 +25,35 @@
   align-items: center;
   flex-wrap: wrap-reverse;
   text-align: center;
+  justify-content: space-around;
   gap: 2rem;
 }
 .promo__container-inner > * {
   flex: 1;
+  min-width: 20ch;
+}
+
+.heading {
+  position: relative;
+  background-color: var(--background-color);
+}
+
+.goofer {
+  position: absolute;
+  top: -6rem;
+  left: calc(50% - 5rem);
+  transition: top 0.3s ease 0.3s;
+}
+.goofer:hover {
+  top: -4.1rem;
+}
+.goofer > img {
+  position: relative;
+  z-index: -1;
+  width: 6rem;
+  margin: 1rem;
+}
+.goofer .eyes img {
+  position: absolute;
+  width: 2rem;
 }
