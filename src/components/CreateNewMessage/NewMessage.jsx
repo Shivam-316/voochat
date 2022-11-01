@@ -80,6 +80,7 @@ export const NewMessage = ({
         value={newMessageState.messageText}
         onChange={handelOnTextChange}
         placeholder="Type Here..."
+        autoComplete="off"
       />
       <ThemedButton
         disabled={

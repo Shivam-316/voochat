@@ -7,7 +7,7 @@
 
 .jumbotron {
   text-align: center;
-  background-color: #595959;
+  background-color: var(--background-color-lighter);
   max-width: fit-content;
   padding: 2rem 4rem;
   border-radius: 20px;
@@ -21,7 +21,7 @@
   align-items: center;
 }
 .jumbotron__heading h1 {
-  color: #ff33b1;
+  color: var(--emphasis-color);
 }
 .jumbotron__heading img {
   width: clamp(100px, 200px, 400px);

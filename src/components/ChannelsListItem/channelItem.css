@@ -7,7 +7,7 @@
   padding: 0.5rem 1rem;
   border: 2px solid grey;
   border-radius: 10px;
-  box-shadow: 0px 0px 10px -1px black;
+  box-shadow: 0px 0px 10px -1px var(--shadow-color);
   margin-bottom: 1rem;
   opacity: 0;
   will-change: opacity;

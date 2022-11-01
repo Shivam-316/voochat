@@ -41,7 +41,7 @@ export const DefaultButton = styled.button.attrs((props) => ({
 
 export const ThemedButton = styled(DefaultButton)`
   background-color: var(--backgound-color-user-input);
-  box-shadow: 1px 1px 15px -2px var(--shadow-color);
+  box-shadow: 4px 4px 5px -2px var(--shadow-color);
   border-radius: 0;
   color: var(--text-color-inactive);
   outline: none;

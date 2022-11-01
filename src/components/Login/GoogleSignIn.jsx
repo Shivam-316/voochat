@@ -7,7 +7,6 @@ import {
 } from "firebase/auth";
 import Button from "../StyledButtons/Button";
 import "./googleSignIn.css";
-import Google from "../../assets/google.svg";
 import Logo from "../../assets/logo.svg";
 import { auth, db } from "../../firebase/Database";
 import { collection, addDoc } from "firebase/firestore";
@@ -63,7 +62,7 @@ export const GoogleSignIn = () => {
         <p className="tagline">The fastest way to chat, with people around!</p>
 
         <Button onClick={signInWithGoogle}>
-          Sign In With <img className="google-icon" src={Google} />
+          Sign In With <i className="fa-brands fa-google"></i>
         </Button>
       </div>
     </div>

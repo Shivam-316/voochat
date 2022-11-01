@@ -26,13 +26,13 @@
 }
 
 :root {
-  --text-color: hsla(0, 0%, 25%, 0.9);
-  --text-color-inactive: hsl(0, 0%, 90%);
-  --background-color: hsl(0, 0%, 80%);
-  --background-color-lighter: hsl(0, 0%, 90%);
-  --background-color-darker: hsl(0, 0%, 60%);
-  --backgound-color-user-input: hsl(0, 0%, 70%);
-  --shadow-color: hsl(0, 0%, 25%);
+  --text-color: hsl(280, 100%, 30%);
+  --text-color-inactive: hsla(280, 37%, 43%, 0.7);
+  --background-color: hsl(0, 0%, 93%);
+  --background-color-lighter: hsla(210, 100%, 90%);
+  --background-color-darker: hsl(210, 100%, 70%);
+  --backgound-color-user-input: hsl(210, 100%, 85%);
+  --shadow-color: hsl(210, 50%, 40%);
 }
 
 :root.dark {
@@ -42,13 +42,8 @@
   --background-color-lighter: hsl(0, 0%, 30%);
   --background-color-darker: hsl(0, 0%, 10%);
   --backgound-color-user-input: hsl(0, 1%, 25%);
-  --shadow-color: hsl(0, 0%, 13%);
+  --shadow-color: black;
 }
-
-/* :root.dark *::placeholder{
-  color: var(--text-color);
-  background-color: var(--background-color-user-input);
-} */
 
 /* Responsive Typography */
 @media screen and (max-width: 1024px){
@@ -79,7 +74,6 @@ textarea{
   background-color: var(--backgound-color-user-input);
 }
 
-
 h1 {
   font-size: var(--h1-font-size);
   line-height: 1.2;
@@ -101,3 +95,4 @@ hr {
 p {
   margin: 0;
 }
+

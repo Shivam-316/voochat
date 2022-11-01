@@ -88,6 +88,7 @@ export const CreateChannel = () => {
         value={channelName}
         onChange={(e) => setChannelName(e.target.value)}
         placeholder="Channel Name Here..."
+        autoComplete="off"
       />
       <ul className="new_channel__users__conatiner">
         {addedUsers.map((user) => (

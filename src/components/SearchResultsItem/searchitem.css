@@ -1,5 +1,5 @@
 .search__results__item {
-  border: 2px solid grey;
+  border: 2px solid var(--text-color);
   padding: 0.5rem;
   border-radius: 5px;
   display: flex;
@@ -16,7 +16,7 @@
 }
 .search__results__item div > p {
   font-size: var(--smaller-font-size);
-  color: #949494;
+  color: var(--text-color-inactive);
 }
 .search__results__item div > p:first-child {
   font-size: var(--small-font-size);
