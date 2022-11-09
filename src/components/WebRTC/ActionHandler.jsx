@@ -1,6 +1,5 @@
-import React from "react";
-import { useContext, useState } from "react";
-import { AuthContext } from "../Auth/AuthProvider";
+import React, { useContext, useEffect, useState } from "react";
+
 import {
   addDoc,
   deleteDoc,
@@ -10,22 +9,45 @@ import {
   getDoc,
   getDocs,
 } from "firebase/firestore";
+import { AuthContext } from "../Auth/AuthProvider";
 import { ThemedButton } from "../StyledButtons/Button";
-import { useNavigate } from "react-router-dom";
-export const ActionButton = ({
+import { useRef, useMemo } from "react";
+import { Howl } from "howler";
+import PhoneRing from "../../assets/phone-ring.wav";
+
+export default function ActionHandler({
   peerConnection: pc,
-  getDeviceStream,
-  LocalVideoRef,
   RemoteVideoRef,
-  remoteStream,
   offererId,
   channelRef,
-}) => {
+}) {
   const [isCallStarted, setCallStarted] = useState(false);
-  const navigate = useNavigate();
+  const unsubFunctionsArray = useRef([]);
   const currentUser = useContext(AuthContext);
   const offerCandidates = collection(channelRef, "offerCandidates");
   const answerCandidates = collection(channelRef, "answerCandidates");
+  const phoneRingSound = useMemo(() => {
+    return new Howl({
+      src: [PhoneRing],
+      loop: true,
+      onload() {
+        console.log("loaded");
+      },
+      onplay() {
+        console.log("playing");
+      },
+      onstop() {
+        console.log("stopped");
+      },
+    });
+  }, []);
+
+  useEffect(() => {
+    return () => {
+      unsubFunctionsArray.current.forEach((unsub) => unsub());
+    };
+  }, []);
+
   // Helper functions
   async function setupOfferer() {
     console.log("offer start");
@@ -33,7 +55,7 @@ export const ActionButton = ({
       event.candidate && addDoc(offerCandidates, event.candidate.toJSON());
     };
 
-    //create offer
+    // create offer
     const offerDescription = await pc.createOffer({
       offerToReceiveAudio: true,
       offerToReceiveVideo: true,
@@ -41,29 +63,30 @@ export const ActionButton = ({
 
     await pc.setLocalDescription(offerDescription);
 
-    //create offerObj
+    // create offerObj
     const offer = {
       sdp: offerDescription.sdp,
       type: offerDescription.type,
     };
 
-    //store offer
+    // store offer
     await updateDoc(channelRef, {
-      [`conferenceCall.offer`]: offer,
+      "conferenceCall.offer": offer,
     });
 
-    //add listner for answer
+    // add listner for answer
     const unsubAnswer = onSnapshot(channelRef, (snapshot) => {
       const data = snapshot.data();
       if (!pc.currentRemoteDescription && data.conferenceCall.answer !== null) {
         const answerDescription = new RTCSessionDescription(
           data.conferenceCall.answer,
         );
+        phoneRingSound.stop();
         pc.setRemoteDescription(answerDescription);
       }
     });
 
-    //add listner for answerCandidates
+    // add listner for answerCandidates
     const unsubAnswerICE = onSnapshot(answerCandidates, (snapshot) => {
       snapshot.docChanges().forEach((change) => {
         if (change.type === "added") {
@@ -72,7 +95,7 @@ export const ActionButton = ({
         }
       });
     });
-    return [unsubAnswer, unsubAnswerICE];
+    unsubFunctionsArray.current = [unsubAnswer, unsubAnswerICE];
   }
 
   async function setupAnswerer() {
@@ -95,7 +118,7 @@ export const ActionButton = ({
     };
 
     await updateDoc(channelRef, {
-      [`conferenceCall.answer`]: answer,
+      "conferenceCall.answer": answer,
     });
 
     const unsubOfferICE = onSnapshot(offerCandidates, (snapshot) => {
@@ -106,71 +129,43 @@ export const ActionButton = ({
         }
       });
     });
-    return [unsubOfferICE];
-  }
-
-  function stopMedia(mediaElement) {
-    mediaElement.current.srcObject?.getTracks().forEach((track) => {
-      track.stop();
-      mediaElement.current.srcObject.removeTrack(track);
-    });
-    mediaElement.current.srcObject = null;
+    unsubFunctionsArray.current = [unsubOfferICE];
   }
 
   // Handelers
-  const handelWebcamStart = () => {
+  const handelAction = async () => {
     console.log("webcam start");
 
-    getDeviceStream("").then((stream) => {
-      stream.getTracks().forEach((track) => {
-        pc.addTrack(track, stream);
-      });
+    pc.ontrack = (event) => {
+      if (event.track.kind === "video")
+        RemoteVideoRef.current.srcObject = new MediaStream([event.track]);
+    };
 
-      LocalVideoRef.current.srcObject = stream;
+    console.log("start connection");
 
-      pc.ontrack = (event) => {
-        console.log(event);
-        remoteStream = new MediaStream();
-        event.streams[0].getTracks().forEach((track) => {
-          remoteStream.addTrack(track);
-        });
-        RemoteVideoRef.current.srcObject = remoteStream;
-      };
+    // setup Offerer or Answerer
 
-      RemoteVideoRef.current.srcObject = new MediaStream();
-
-      console.log("start connection");
-
-      //setup Offerer or Answerer
-
-      if (offererId === currentUser.uid)
-        setupOfferer().then(() => setCallStarted(true));
-      else setupAnswerer().then(() => setCallStarted(true));
-    });
+    if (offererId === currentUser.uid) {
+      phoneRingSound.play();
+      await setupOfferer();
+    } else await setupAnswerer();
+    setCallStarted(true);
   };
 
   const handelHangUp = async () => {
-    await updateDoc(channelRef, {
-      [`conferenceCall.answer`]: null,
-      [`conferenceCall.offer`]: null,
-      [`conferenceCall.offererId`]: null,
-      ["conferenceCall.isActive"]: false,
-    });
-
+    phoneRingSound.stop();
     const offerDocs = await getDocs(offerCandidates);
-    offerDocs.forEach(async (doc) => await deleteDoc(doc.ref));
+    offerDocs.forEach((doc) => deleteDoc(doc.ref));
 
     const answerDocs = await getDocs(answerCandidates);
-    answerDocs.forEach(async (doc) => await deleteDoc(doc.ref));
+    answerDocs.forEach((doc) => deleteDoc(doc.ref));
 
-    pc.getSenders().forEach((sender) => pc.removeTrack(sender));
-
-    stopMedia(LocalVideoRef);
-    stopMedia(RemoteVideoRef);
-    pc.close();
-    pc = null;
-
-    navigate(-1);
+    await updateDoc(channelRef, {
+      "conferenceCall.answer": null,
+      "conferenceCall.offer": null,
+      "conferenceCall.offererId": null,
+      "conferenceCall.isActive": false,
+    });
   };
 
   return (
@@ -183,34 +178,36 @@ export const ActionButton = ({
             color: "var(--text-color)",
             borderRadius: "10px",
           }}>
-          <i className="fa-solid fa-phone-slash"></i>
+          <i className="fa-solid fa-phone-slash" />
         </ThemedButton>
       ) : (
         <ThemedButton
-          onClick={handelWebcamStart}
+          onClick={handelAction}
           disabled={offererId === null}
           style={{
             backgroundColor: "green",
             color: "var(--text-color)",
             borderRadius: "10px",
           }}>
-          {offererId === currentUser.uid ? (
+          {offererId === null ? null : offererId === currentUser.uid ? (
             <span>
               Ring
               <i
-                className="fa-solid fa-satellite-dish"
-                style={{ paddingLeft: "0.5rem" }}></i>
+                className="fa-solid fa-phone"
+                style={{ paddingLeft: "0.5rem" }}
+              />
             </span>
           ) : (
             <span>
               Answer
               <i
                 className="fa-solid fa-phone-flip"
-                style={{ paddingLeft: "0.5rem" }}></i>
+                style={{ paddingLeft: "0.5rem" }}
+              />
             </span>
           )}
         </ThemedButton>
       )}
     </div>
   );
-};
+}

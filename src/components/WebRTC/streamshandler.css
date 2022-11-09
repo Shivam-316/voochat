@@ -5,6 +5,10 @@
   top: 0.5rem;
   width: 100%;
 }
+.device-options-container label i {
+  color: var(--text-color);
+  padding-right: 0.5rem;
+}
 .device-options-container select {
   appearance: none;
   background-color: transparent;
@@ -14,5 +18,18 @@
 .device-options-container select option {
   position: relative;
   background-color: var(--background-color);
+  color: var(--text-color);
+}
+.device-options-container button {
+  position: absolute;
+  top: 0.5rem;
+  right: 2rem;
+  z-index: 2;
+  font-size: var(--large-font-size);
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+}
+.device-options-container button i {
   color: var(--text-color);
 }

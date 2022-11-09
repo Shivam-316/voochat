@@ -1,31 +1,32 @@
 .conference-calling {
   display: flex;
   justify-content: center;
+  align-items: center;
 }
 
 .streams-container {
-  padding-block: 1rem;
-  min-width: 70vw;
+  padding: 1rem;
+  width: 70vw;
   position: relative;
 }
 
 .remotestream-container {
   border-radius: 10px;
-  height: calc(100% - 2rem);
-  width: 40rem;
+  width: 100%;
+  height: calc(100vh - 10rem);
   position: relative;
   margin: 0 auto;
-  box-shadow: 0px 0px 6px 0px black;
+  box-shadow: 0px 0px 15px 2px var(--shadow-color);
 }
 
 .localstream-container {
   border-radius: 10px;
   position: absolute;
-  bottom: 0;
-  right: 0;
-  width: 15rem;
-  height: 9rem;
-  box-shadow: 0px 0px 6px 1px black;
+  bottom: 1rem;
+  right: 1rem;
+  width: 12rem;
+  height: 8rem;
+  box-shadow: 0px 0px 15px 2px var(--shadow-color);
 }
 
 video {
@@ -33,6 +34,14 @@ video {
   height: 100%;
   object-fit: cover;
   border-radius: 10px;
+  background-color: var(--background-color-lighter);
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+
+#remoteStream {
+  background-size: 10rem;
 }
 
 .action-button {
@@ -40,4 +49,26 @@ video {
   position: absolute;
   text-align: center;
   bottom: 1rem;
+}
+
+@media only screen and (max-width: 770px) {
+  .streams-container {
+    width: 90vw;
+  }
+
+  .localstream-container {
+    width: 7rem;
+    height: 9rem;
+  }
+}
+@media only screen and (max-width: 450px) {
+  .streams-container {
+    width: 100%;
+    padding-inline: 0.5rem;
+  }
+
+  .localstream-container {
+    width: 5rem;
+    height: 7rem;
+  }
 }

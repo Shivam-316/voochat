@@ -1,89 +1,93 @@
+/* eslint-disable jsx-a11y/media-has-caption */
 import {
   collection,
   doc,
   getDoc,
   getDocs,
+  onSnapshot,
   query,
   where,
 } from "firebase/firestore";
-import React from "react";
-import { useState } from "react";
-import { useContext, useEffect, useRef } from "react";
-import { useParams } from "react-router-dom";
+import React, { useState, useContext, useEffect, useRef } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import { db } from "../../firebase/Database";
 import { AuthContext } from "../Auth/AuthProvider";
 import Avatar from "../../assets/avatar.svg";
-import { SelectDevice } from "./SelectDevice";
-import { ActionButton } from "./ActionButton";
+import StreamsHandler from "./StreamsHandler";
+import ActionHandler from "./ActionHandler";
 import "./videocalling.css";
+import { useMemo } from "react";
+
 const connectionOptions = {
   iceServers: [
     {
-      urls: ["stun:stun1.l.google.com:19302", "stun:stun2.l.google.com:19302"],
+      urls: [
+        "stun:stun.l.google.com:19302",
+        "stun:stun1.l.google.com:19302",
+        "stun:stun2.l.google.com:19302",
+        "stun:stun3.l.google.com:19302",
+        "stun:stun4.l.google.com:19302",
+      ],
     },
   ],
   iceCandidatePoolSize: 10,
 };
 
-let pc = new RTCPeerConnection(connectionOptions);
-let remoteStream = null;
-
-export const VideoCalling = () => {
-  const [offererId, setOffererId] = useState(null);
+export default function VideoCalling() {
+  const pc = useMemo(() => new RTCPeerConnection(connectionOptions), []);
   const currentUser = useContext(AuthContext);
-  const LocalVideo = useRef();
-  const RemoteVideo = useRef();
+  const [channelData, setChannelData] = useState(null);
+
+  const closeActiveStreams = useRef(null);
+  const LocalVideo = useRef(null);
+  const RemoteVideo = useRef(null);
+  const audio = useRef(null);
+
+  const navigate = useNavigate();
 
   const { channelID } = useParams();
   const channelRef = doc(db, `channels/${channelID}`);
 
   useEffect(() => {
-    // set offererId
-    getDoc(channelRef).then((channelData) => {
-      setOffererId(channelData.get("conferenceCall.offererId"));
+    const unsub = onSnapshot(channelRef, (snapshot) => {
+      const { isActive, offer, offererId } = snapshot.get("conferenceCall");
+      if (!isActive || (offererId !== currentUser.uid && offer === null)) {
+        closeActiveStreams.current();
+        navigate(-1);
+      }
     });
 
-    // add posters to video elemets
-    getDoc(channelRef).then((docData) => {
-      const participantsIds = docData.get("participants");
-      const remoteUserId = participantsIds.find(
-        (participantId) => participantId !== currentUser.uid,
-      );
+    if (channelData) {
+      const remoteUserId = channelData
+        .get("participants")
+        .find((participantId) => participantId !== currentUser.uid);
 
-      getDocs(
-        query(collection(db, "users"), where("uid", "==", remoteUserId)),
-      ).then((remoteUserDataArray) => {
-        const remoteUserData = remoteUserDataArray.docs[0];
-        RemoteVideo.current.poster = remoteUserData.get("photoURL") || Avatar;
-        LocalVideo.current.poster = currentUser.photoURL || Avatar;
-      });
-    });
-  }, []);
+      getDocs(query(collection(db, "users"), where("uid", "==", remoteUserId)))
+        .then((remoteUserDataArray) => {
+          const remoteUserData = remoteUserDataArray.docs[0];
+          RemoteVideo.current.style.backgroundImage = `url(${
+            remoteUserData.get("photoURL") || Avatar
+          })`;
+          LocalVideo.current.style.backgroundImage = `url(${
+            currentUser.photoURL || Avatar
+          })`;
+        })
+        .catch((error) => console.log(error));
+    } else getDoc(channelRef).then((data) => setChannelData(data));
 
-  async function getDeviceStream(deviceId) {
-    console.log("stream get");
-    let videoConstraints = {};
-
-    if (deviceId === "") {
-      videoConstraints.facingMode = "environment";
-    } else {
-      videoConstraints.deviceId = { exact: deviceId };
-    }
-
-    return await navigator.mediaDevices.getUserMedia({
-      video: videoConstraints,
-      audio: true,
-    });
-  }
+    return unsub;
+  }, [channelData, channelRef, currentUser, navigate]);
 
   return (
     <div className="conference-calling">
       <div className="streams-container">
         <div className="remotestream-container">
-          <SelectDevice
+          <StreamsHandler
             peerConnection={pc}
-            mediaSource={LocalVideo}
-            getDeviceStream={getDeviceStream}
+            LocalVideoRef={LocalVideo}
+            RemoteVideoRef={RemoteVideo}
+            AudioRef={audio}
+            closeActiveStreams={closeActiveStreams}
           />
 
           <video ref={RemoteVideo} id="remoteStream" autoPlay playsInline />
@@ -91,17 +95,17 @@ export const VideoCalling = () => {
           <div className="localstream-container">
             <video ref={LocalVideo} id="localStream" autoPlay playsInline />
           </div>
-
-          <ActionButton
-            peerConnection={pc}
-            offererId={offererId}
-            getDeviceStream={getDeviceStream}
-            LocalVideoRef={LocalVideo}
-            RemoteVideoRef={RemoteVideo}
-            channelRef={channelRef}
-          />
+          {channelData !== null ? (
+            <ActionHandler
+              peerConnection={pc}
+              offererId={channelData.get("conferenceCall.offererId")}
+              RemoteVideoRef={RemoteVideo}
+              channelRef={channelRef}
+            />
+          ) : null}
         </div>
+        <audio ref={audio} style={{ display: "none" }}></audio>
       </div>
     </div>
   );
-};
+}

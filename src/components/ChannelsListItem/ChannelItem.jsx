@@ -1,4 +1,4 @@
-import { arrayRemove, arrayUnion, doc, updateDoc } from "firebase/firestore";
+import { arrayRemove, arrayUnion, doc, getDoc, updateDoc } from "firebase/firestore";
 import React from "react";
 import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
@@ -9,17 +9,24 @@ import "./channelItem.css";
 import { StyledName } from "./ChannelName.styles";
 export const ChannelItem = ({ channelID, name, isRequested }) => {
   const currentUser = useContext(AuthContext);
+  const channelRef = doc(db, "channels", channelID);
+
   const navigate = useNavigate();
 
   const handelDelete = async () => {
     const queryField = isRequested ? "requestedUsers" : "participants";
-    await updateDoc(doc(db, "channels", channelID), {
+    await updateDoc(channelRef, {
       [queryField]: arrayRemove(currentUser.uid),
+    });
+
+    const channelData = await getDoc(doc(db, "channels", channelID));
+    await updateDoc(channelRef, {
+      [`conferenceCall.isAvaliable`]: channelData.get('participants').length == 2,
     });
   };
 
   const handelRequestAccepted = async () => {
-    await updateDoc(doc(db, "channels", channelID), {
+    await updateDoc(channelRef, {
       participants: arrayUnion(currentUser.uid),
     });
     handelDelete();

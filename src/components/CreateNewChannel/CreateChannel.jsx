@@ -78,7 +78,7 @@ export const CreateChannel = () => {
         requestedUsers: addedUsers.map((user) => user.uid),
         conferenceCall: {
           isActive: false,
-          isAvaliable: addedUsers.length === 1,
+          isAvaliable: false,
           offer: null,
           answer: null, 
         }
