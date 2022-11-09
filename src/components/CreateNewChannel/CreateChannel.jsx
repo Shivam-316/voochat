@@ -76,6 +76,12 @@ export const CreateChannel = () => {
         Name: channelName,
         participants: [currentUser.uid],
         requestedUsers: addedUsers.map((user) => user.uid),
+        conferenceCall: {
+          isActive: false,
+          isAvaliable: false,
+          offer: null,
+          answer: null, 
+        }
       });
       navigate("/channels", { replace: true });
     }

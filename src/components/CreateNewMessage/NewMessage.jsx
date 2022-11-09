@@ -5,25 +5,38 @@ import {
   serverTimestamp,
   where,
   addDoc,
+  onSnapshot,
+  doc,
 } from "firebase/firestore";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
-import { useState } from "react";
+import { useState , useContext , useEffect } from "react";
 import { db, storage } from "../../firebase/Database";
 import { ThemedButton } from "../StyledButtons/Button";
 import { CHANGE_MESSAGE_ACTION, RESET_ACTION } from "../Channel/UserChannel";
 import { FileUpload } from "../UploadFile/FileUpload";
-import { useContext } from "react";
+
 import { AuthContext } from "../Auth/AuthProvider";
 import Spinner from "../StyledSpinners/Spinner";
 import "./newmessage.css";
+import InitiateVideoCall from "../WebRTC/InitiateVideoCall";
 
-export const NewMessage = ({
+
+export function NewMessage({
   newMessageState,
   newMessageStateDispatch,
   channelID,
-}) => {
+}) {
   const currentUser = useContext(AuthContext);
   const [postingMessage, setPostingMessage] = useState(false);
+  const [isVideoCallingAvaliable, setVideoCallingAvaliable] = useState(false);
+
+  useEffect(() => {
+    const unsub = onSnapshot(doc(db, `channels/${channelID}`), (snapshot) =>
+      setVideoCallingAvaliable(snapshot.get(`conferenceCall.isAvaliable`)),
+    );
+
+    return unsub;
+  });
 
   const handelOnSubmit = async (e) => {
     e.preventDefault();
@@ -32,11 +45,11 @@ export const NewMessage = ({
       let imageURL = null;
 
       if (newMessageState.messageImage) {
-        let imageRef = ref(storage, newMessageState.messageImage.name);
+        const imageRef = ref(storage, newMessageState.messageImage.name);
         await uploadBytes(imageRef, newMessageState.messageImage).catch(
           (error) => console.log(error),
         );
-        let url = await getDownloadURL(imageRef).catch((error) =>
+        const url = await getDownloadURL(imageRef).catch((error) =>
           console.log(error),
         );
         imageURL = url;
@@ -44,12 +57,12 @@ export const NewMessage = ({
 
       const messagesRef = collection(db, `channels/${channelID}/messages`);
       const usersRef = collection(db, "users");
-      let userMetaDataSnap = await getDocs(
+      const userMetaDataSnap = await getDocs(
         query(usersRef, where("uid", "==", currentUser.uid)),
       );
 
-      let { userColor } = userMetaDataSnap.docs[0].data();
-      let { displayName, photoURL } = currentUser;
+      const { userColor } = userMetaDataSnap.docs[0].data();
+      const { displayName, photoURL } = currentUser;
 
       await addDoc(messagesRef, {
         displayName,
@@ -66,7 +79,7 @@ export const NewMessage = ({
   };
 
   const handelOnTextChange = (e) => {
-    let text = e.target.value;
+    const text = e.target.value;
     newMessageStateDispatch(CHANGE_MESSAGE_ACTION({ messageText: text }));
   };
 
@@ -93,11 +106,12 @@ export const NewMessage = ({
         type="submit"
         style={{ borderTopRightRadius: "5px", borderBottomRightRadius: "5px" }}>
         {postingMessage ? (
-          <Spinner side={"1rem"} />
+          <Spinner side="1rem" />
         ) : (
-          <i className="fa-sharp fa-solid fa-paper-plane"></i>
+          <i className="fa-sharp fa-solid fa-paper-plane" />
         )}
       </ThemedButton>
+      {isVideoCallingAvaliable && <InitiateVideoCall />}
     </form>
   );
-};
+}

@@ -6,11 +6,8 @@ import {
   onSnapshot,
   collection,
   query,
-  where,
   orderBy,
   limit,
-  getDoc,
-  doc,
 } from "firebase/firestore";
 import "./channel.css";
 import { ImageUploadPreview } from "../UploadPreview/ImageUploadPreview";
