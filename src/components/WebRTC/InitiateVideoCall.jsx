@@ -38,12 +38,11 @@ export default function InitiateVideoCall() {
   };
 
   return (
-    <div>
+    <div style={{"--order": 2}}>
       {isOfferCreated ? (
         <ThemedButton
           style={{
             borderRadius: "5px",
-            marginLeft: "0.5rem",
             backgroundColor: "green",
             color: "var(--text-color)",
           }}
@@ -53,8 +52,9 @@ export default function InitiateVideoCall() {
       ) : (
         <ThemedButton
           disabled={isCallIntiated}
-          style={{ borderRadius: "5px", marginLeft: "0.5rem" }}
-          onClick={handelInitiateVideoCall}>
+          style={{ borderRadius: "5px"}}
+          onClick={handelInitiateVideoCall}
+          >
           <i className="fa-solid fa-video" />
         </ThemedButton>
       )}

@@ -18,27 +18,20 @@ import PhoneRing from "../../assets/phone-ring.wav";
 export default function ActionHandler({
   peerConnection: pc,
   RemoteVideoRef,
-  offererId,
   channelRef,
+  handelHangUp,
 }) {
   const [isCallStarted, setCallStarted] = useState(false);
+  const [offererId, setoffererId] = useState(null);
   const unsubFunctionsArray = useRef([]);
   const currentUser = useContext(AuthContext);
   const offerCandidates = collection(channelRef, "offerCandidates");
   const answerCandidates = collection(channelRef, "answerCandidates");
+
   const phoneRingSound = useMemo(() => {
     return new Howl({
       src: [PhoneRing],
       loop: true,
-      onload() {
-        console.log("loaded");
-      },
-      onplay() {
-        console.log("playing");
-      },
-      onstop() {
-        console.log("stopped");
-      },
     });
   }, []);
 
@@ -47,6 +40,15 @@ export default function ActionHandler({
       unsubFunctionsArray.current.forEach((unsub) => unsub());
     };
   }, []);
+
+  useEffect(() => {
+    async function getOffererId(reference) {
+      const channelDoc = await getDoc(reference);
+      return channelDoc.get("conferenceCall.offererId");
+    }
+
+    getOffererId(channelRef).then((id) => setoffererId(id));
+  }, [channelRef]);
 
   // Helper functions
   async function setupOfferer() {
@@ -146,13 +148,13 @@ export default function ActionHandler({
     // setup Offerer or Answerer
 
     if (offererId === currentUser.uid) {
-      phoneRingSound.play();
       await setupOfferer();
+      phoneRingSound.play();
     } else await setupAnswerer();
     setCallStarted(true);
   };
 
-  const handelHangUp = async () => {
+  handelHangUp.current = async () => {
     phoneRingSound.stop();
     const offerDocs = await getDocs(offerCandidates);
     offerDocs.forEach((doc) => deleteDoc(doc.ref));
@@ -168,11 +170,11 @@ export default function ActionHandler({
     });
   };
 
-  return (
-    <div className="action-button">
-      {isCallStarted ? (
+  if (isCallStarted)
+    return (
+      <div className="action-button">
         <ThemedButton
-          onClick={handelHangUp}
+          onClick={handelHangUp.current}
           style={{
             backgroundColor: "red",
             color: "var(--text-color)",
@@ -180,34 +182,38 @@ export default function ActionHandler({
           }}>
           <i className="fa-solid fa-phone-slash" />
         </ThemedButton>
-      ) : (
-        <ThemedButton
-          onClick={handelAction}
-          disabled={offererId === null}
-          style={{
-            backgroundColor: "green",
-            color: "var(--text-color)",
-            borderRadius: "10px",
-          }}>
-          {offererId === null ? null : offererId === currentUser.uid ? (
-            <span>
-              Ring
-              <i
-                className="fa-solid fa-phone"
-                style={{ paddingLeft: "0.5rem" }}
-              />
-            </span>
-          ) : (
-            <span>
-              Answer
-              <i
-                className="fa-solid fa-phone-flip"
-                style={{ paddingLeft: "0.5rem" }}
-              />
-            </span>
-          )}
-        </ThemedButton>
-      )}
-    </div>
-  );
+      </div>
+    );
+  else
+    return (
+      <div className="action-button">
+        {offererId && (
+          <ThemedButton
+            onClick={handelAction}
+            style={{
+              backgroundColor: "green",
+              color: "var(--text-color)",
+              borderRadius: "10px",
+            }}>
+            {offererId === currentUser.uid ? (
+              <span>
+                Ring
+                <i
+                  className="fa-solid fa-phone"
+                  style={{ paddingLeft: "0.5rem" }}
+                />
+              </span>
+            ) : (
+              <span>
+                Answer
+                <i
+                  className="fa-solid fa-phone-flip"
+                  style={{ paddingLeft: "0.5rem" }}
+                />
+              </span>
+            )}
+          </ThemedButton>
+        )}
+      </div>
+    );
 }

@@ -9,7 +9,7 @@ import {
   doc,
 } from "firebase/firestore";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
-import { useState , useContext , useEffect } from "react";
+import React, { useState , useContext , useEffect } from "react";
 import { db, storage } from "../../firebase/Database";
 import { ThemedButton } from "../StyledButtons/Button";
 import { CHANGE_MESSAGE_ACTION, RESET_ACTION } from "../Channel/UserChannel";
@@ -83,12 +83,26 @@ export function NewMessage({
     newMessageStateDispatch(CHANGE_MESSAGE_ACTION({ messageText: text }));
   };
 
+  const handelToogleFloatOptions = (e) => {
+    const optionsDiv = e.currentTarget.querySelector('.fab-options');
+    optionsDiv.classList.toggle('hide')
+  }
+
   return (
     <form className="message__form" onSubmit={handelOnSubmit}>
-      <FileUpload
-        newMessageStateDispatch={newMessageStateDispatch}
-        postingMessage={postingMessage}
-      />
+      {/* TODO: css var for naimation delay added to compnents nto component call: fix req */}
+      <div className="fab-button" onClick={(e) => handelToogleFloatOptions(e)}>
+        <div className="fab-options hide">
+          <FileUpload
+          newMessageStateDispatch={newMessageStateDispatch}
+          postingMessage={postingMessage}
+          />
+          {isVideoCallingAvaliable && <InitiateVideoCall/>}
+
+        </div>
+        <i className="fa-solid fa-ellipsis-vertical"></i>
+      </div>
+
       <input
         type="text"
         name="message"
@@ -98,6 +112,7 @@ export function NewMessage({
         autoComplete="off"
         className="message__textbox"
       />
+
       <ThemedButton
         disabled={
           postingMessage ||
@@ -111,7 +126,6 @@ export function NewMessage({
           <i className="fa-sharp fa-solid fa-paper-plane" />
         )}
       </ThemedButton>
-      {isVideoCallingAvaliable && <InitiateVideoCall />}
     </form>
   );
 }

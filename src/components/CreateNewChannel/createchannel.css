@@ -2,7 +2,7 @@
   width: 40vw;
   margin: 0 auto;
   display: grid;
-  grid-template-rows: 4rem repeat(3, max-content);
+  grid-template-rows: calc(var(--h3-font-size) + 2rem) repeat(3, max-content);
   padding-block: 2rem 1rem;
   gap: 1rem;
 }
@@ -15,6 +15,7 @@
 }
 .newchannel__conatiner > input {
   font-size: var(--h3-font-size);
+  padding-inline: 1rem;
   box-shadow: 0px 0px 6px 0px var(--shadow-color);
 }
 

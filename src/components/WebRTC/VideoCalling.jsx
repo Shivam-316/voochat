@@ -36,9 +36,10 @@ const connectionOptions = {
 export default function VideoCalling() {
   const pc = useMemo(() => new RTCPeerConnection(connectionOptions), []);
   const currentUser = useContext(AuthContext);
-  const [channelData, setChannelData] = useState(null);
+  const [remotePosterUrl, setRemotePosterUrl] = useState(null);
 
   const closeActiveStreams = useRef(null);
+  const handelHangUp = useRef(null);
   const LocalVideo = useRef(null);
   const RemoteVideo = useRef(null);
   const audio = useRef(null);
@@ -48,7 +49,25 @@ export default function VideoCalling() {
   const { channelID } = useParams();
   const channelRef = doc(db, `channels/${channelID}`);
 
+  //TODO: back button ends call
   useEffect(() => {
+    if (!remotePosterUrl) {
+      getDoc(channelRef).then((channelData) => {
+        const remoteUserId = channelData
+          .get("participants")
+          .find((participantId) => participantId !== currentUser.uid);
+  
+        getDocs(
+          query(collection(db, "users"), where("uid", "==", remoteUserId)),
+        )
+          .then((remoteUserDataArray) => {
+            const remoteUserData = remoteUserDataArray.docs[0];
+            setRemotePosterUrl(`url(${remoteUserData.get("photoURL")})`);
+          })
+          .catch((error) => console.log(error));
+      });
+    }
+
     const unsub = onSnapshot(channelRef, (snapshot) => {
       const { isActive, offer, offererId } = snapshot.get("conferenceCall");
       if (!isActive || (offererId !== currentUser.uid && offer === null)) {
@@ -57,26 +76,8 @@ export default function VideoCalling() {
       }
     });
 
-    if (channelData) {
-      const remoteUserId = channelData
-        .get("participants")
-        .find((participantId) => participantId !== currentUser.uid);
-
-      getDocs(query(collection(db, "users"), where("uid", "==", remoteUserId)))
-        .then((remoteUserDataArray) => {
-          const remoteUserData = remoteUserDataArray.docs[0];
-          RemoteVideo.current.style.backgroundImage = `url(${
-            remoteUserData.get("photoURL") || Avatar
-          })`;
-          LocalVideo.current.style.backgroundImage = `url(${
-            currentUser.photoURL || Avatar
-          })`;
-        })
-        .catch((error) => console.log(error));
-    } else getDoc(channelRef).then((data) => setChannelData(data));
-
     return unsub;
-  }, [channelData, channelRef, currentUser, navigate]);
+  }, []);
 
   return (
     <div className="conference-calling">
@@ -90,19 +91,30 @@ export default function VideoCalling() {
             closeActiveStreams={closeActiveStreams}
           />
 
-          <video ref={RemoteVideo} id="remoteStream" autoPlay playsInline />
+          <video
+            ref={RemoteVideo}
+            id="remoteStream"
+            autoPlay
+            playsInline
+            style={{ backgroundImage: `${remotePosterUrl || Avatar}` }}
+          />
 
           <div className="localstream-container">
-            <video ref={LocalVideo} id="localStream" autoPlay playsInline />
-          </div>
-          {channelData !== null ? (
-            <ActionHandler
-              peerConnection={pc}
-              offererId={channelData.get("conferenceCall.offererId")}
-              RemoteVideoRef={RemoteVideo}
-              channelRef={channelRef}
+            <video
+              ref={LocalVideo}
+              id="localStream"
+              autoPlay
+              playsInline
+              style={{ backgroundImage: `${currentUser.photoURL || Avatar}` }}
             />
-          ) : null}
+          </div>
+
+          <ActionHandler
+            peerConnection={pc}
+            RemoteVideoRef={RemoteVideo}
+            channelRef={channelRef}
+            handelHangUp={handelHangUp}
+          />
         </div>
         <audio ref={audio} style={{ display: "none" }}></audio>
       </div>

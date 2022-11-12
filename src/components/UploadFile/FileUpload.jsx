@@ -16,11 +16,11 @@ export const FileUpload = ({ postingMessage, newMessageStateDispatch }) => {
   };
 
   return (
-    <div className="fileupload__container">
+    <div className="fileupload__container" style={{"--order": 1}}>
       <ThemedButton
-        style={{ borderRadius: "5px", padding: "0" }}
+        style={{ borderRadius: "5px"}}
         disabled={postingMessage}>
-        <label htmlFor="upload_image" style={{ padding: "1rem" }}>
+        <label htmlFor="upload_image">
           <i className="fa-sharp fa-solid fa-upload"></i>
         </label>
       </ThemedButton>

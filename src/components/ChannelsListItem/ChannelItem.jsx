@@ -21,7 +21,7 @@ export const ChannelItem = ({ channelID, name, isRequested }) => {
 
     const channelData = await getDoc(doc(db, "channels", channelID));
     await updateDoc(channelRef, {
-      [`conferenceCall.isAvaliable`]: channelData.get('participants').length == 2,
+      "conferenceCall.isAvaliable": channelData.get('participants').length == 2,
     });
   };
 

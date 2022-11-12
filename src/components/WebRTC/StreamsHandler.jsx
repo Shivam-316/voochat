@@ -119,7 +119,7 @@ export default function StreamsHandler({
         },
       );
     });
-  }, [pc, LocalVideoRef]);
+  }, []);
 
   const handelDeviceChange = (e) => {
     const deviceKind = e.target.id;

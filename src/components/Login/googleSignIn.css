@@ -24,7 +24,7 @@
   color: var(--emphasis-color);
 }
 .jumbotron__heading img {
-  width: clamp(100px, 200px, 400px);
+  width: 13rem;
 }
 
 .google-icon {
@@ -34,4 +34,10 @@
 
 .tagline {
   margin-block: 1rem;
+}
+
+@media only screen and (max-width: 430px) {
+  .jumbotron {
+    padding: 2rem;
+  }
 }

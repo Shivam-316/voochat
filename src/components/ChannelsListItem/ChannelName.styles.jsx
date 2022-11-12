@@ -9,4 +9,8 @@ export const StyledName = styled.h3`
         cursor: pointer;
       }
     `}
+  white-space: nowrap;
+  overflow: hidden;
+  -o-text-overflow: ellipsis;
+  text-overflow: ellipsis;
 `;
