@@ -36,12 +36,9 @@ export default function ActionHandler({
 
   useEffect(() => {
     return () => {
-      if (offererId && !isCallStarted) {
-        handelHangUp();
-      }
       unsubFunctionsArray.current.forEach((unsub) => unsub());
     };
-  }, [offererId, isCallStarted]);
+  }, []);
 
   useEffect(() => {
     async function getOffererId(reference) {
