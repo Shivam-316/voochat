@@ -25,14 +25,15 @@
   -webkit-text-size-adjust: 100%;
 }
 
+/* TODO: fix light color sceme */
 :root {
-  --text-color: hsl(280, 100%, 30%);
+  --text-color: hsl(0, 1%, 25%);
   --text-color-inactive: hsla(280, 37%, 43%, 0.7);
-  --background-color: hsl(0, 0%, 93%);
-  --background-color-lighter: hsla(210, 100%, 90%);
-  --background-color-darker: hsl(210, 100%, 70%);
-  --backgound-color-user-input: hsl(210, 100%, 85%);
-  --shadow-color: hsl(210, 50%, 40%);
+  --background-color: hsl(0, 0%, 100%);
+  --background-color-lighter: hsla(280, 100%, 30%, 0.3);
+  --background-color-darker: hsla(280, 100%, 30%, 0.5);
+  --backgound-color-user-input: hsla(280, 100%, 30%, 0.3);
+  --shadow-color: hsl(280, 100%, 25%);
 }
 
 :root.dark {
