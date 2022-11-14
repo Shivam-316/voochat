@@ -19,7 +19,6 @@ export default function ActionHandler({
   peerConnection: pc,
   RemoteVideoRef,
   channelRef,
-  handelHangUp,
 }) {
   const [isCallStarted, setCallStarted] = useState(false);
   const [offererId, setoffererId] = useState(null);
@@ -37,9 +36,12 @@ export default function ActionHandler({
 
   useEffect(() => {
     return () => {
+      if (offererId && !isCallStarted) {
+        handelHangUp();
+      }
       unsubFunctionsArray.current.forEach((unsub) => unsub());
     };
-  }, []);
+  }, [offererId, isCallStarted]);
 
   useEffect(() => {
     async function getOffererId(reference) {
@@ -154,7 +156,7 @@ export default function ActionHandler({
     setCallStarted(true);
   };
 
-  handelHangUp.current = async () => {
+  const handelHangUp = async () => {
     phoneRingSound.stop();
     const offerDocs = await getDocs(offerCandidates);
     offerDocs.forEach((doc) => deleteDoc(doc.ref));
@@ -168,13 +170,14 @@ export default function ActionHandler({
       "conferenceCall.offererId": null,
       "conferenceCall.isActive": false,
     });
+    console.log("hungged");
   };
 
   if (isCallStarted)
     return (
       <div className="action-button">
         <ThemedButton
-          onClick={handelHangUp.current}
+          onClick={handelHangUp}
           style={{
             backgroundColor: "red",
             color: "var(--text-color)",

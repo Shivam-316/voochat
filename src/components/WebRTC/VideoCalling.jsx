@@ -39,7 +39,6 @@ export default function VideoCalling() {
   const [remotePosterUrl, setRemotePosterUrl] = useState(null);
 
   const closeActiveStreams = useRef(null);
-  const handelHangUp = useRef(null);
   const LocalVideo = useRef(null);
   const RemoteVideo = useRef(null);
   const audio = useRef(null);
@@ -49,7 +48,7 @@ export default function VideoCalling() {
   const { channelID } = useParams();
   const channelRef = doc(db, `channels/${channelID}`);
 
-  //TODO: back button ends call
+  //TODO: close sttreams on back
   useEffect(() => {
     if (!remotePosterUrl) {
       getDoc(channelRef).then((channelData) => {
@@ -69,6 +68,7 @@ export default function VideoCalling() {
     }
 
     const unsub = onSnapshot(channelRef, (snapshot) => {
+      console.log('cking cond')
       const { isActive, offer, offererId } = snapshot.get("conferenceCall");
       if (!isActive || (offererId !== currentUser.uid && offer === null)) {
         closeActiveStreams.current();
@@ -77,7 +77,7 @@ export default function VideoCalling() {
     });
 
     return unsub;
-  }, []);
+  }, [remotePosterUrl, channelRef]);
 
   return (
     <div className="conference-calling">
@@ -113,7 +113,6 @@ export default function VideoCalling() {
             peerConnection={pc}
             RemoteVideoRef={RemoteVideo}
             channelRef={channelRef}
-            handelHangUp={handelHangUp}
           />
         </div>
         <audio ref={audio} style={{ display: "none" }}></audio>
