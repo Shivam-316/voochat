@@ -14,8 +14,9 @@ Voochat is a Realtime texting and video calling service with fast and hassle fre
 | ✔  | ***Search*** and Add Users To Channel|
 | ✔  | Unlimited Users In A Channel|
 | ✔  |  Privacy ***Security*** w/ Firebase Rules |
-| 🕓  | Video Calling Support|
-| 🕓  | First In Class UI |
+| ✔  | Peer ***Video Calling*** Support|
+| ✔  | Video & Audio ***Device Switching*** Support|
+| 🕓  | Notifications
 | 🕓  | TypeScript Typography |
 | 🕓  | Tests |
 
@@ -38,3 +39,8 @@ Voochat is a Realtime texting and video calling service with fast and hassle fre
 - **🚩 Chat Interface**
 
  <img src="https://user-images.githubusercontent.com/56474719/194774540-218c3e6b-42a3-471c-b284-0be2567b5e9f.png" width="500">
+
+- **🚩 Video Calling**
+
+ <img src="https://user-images.githubusercontent.com/56474719/201860949-5c45861e-d222-4532-8f4e-9342d47f6b6f.png" width="500">
+ <img src="https://user-images.githubusercontent.com/56474719/201862242-7b3d7ac0-83e1-46f4-b5a3-5a159526208f.png" width="500">
